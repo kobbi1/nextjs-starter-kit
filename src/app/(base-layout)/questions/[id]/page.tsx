@@ -12,27 +12,26 @@ export const metadata = {
 const query = graphql(
   /* GraphQL */ `
     query Question($id: ItemId!) {
-      question(filter: {id: { eq: $id} }) {
-          questiontitle
+      question(filter: { id: { eq: $id } }) {
+        questiontitle
+        id
+        spurning
+        flokkur {
+          title
           id
-          spurning
-          flokkur {
-            title
-            id
-          }
+        }
       }
     }
   `,
   [],
 );
 
-export default async function QuestionPage( {params}: {params: Promise<{id:string}> }) {
+export default async function QuestionPage({ params }: { params: Promise<{ id: string }> }) {
   revalidateTag('datocms');
 
-  const {id} = await params;
-  const { question } = await executeQuery(query, {variables: {id}});
+  const { id } = await params;
+  const { question } = await executeQuery(query, { variables: { id } });
 
-      
   if (!question) {
     notFound();
   }
@@ -40,9 +39,11 @@ export default async function QuestionPage( {params}: {params: Promise<{id:strin
   return (
     <>
       <h3>{question.questiontitle}</h3>
-      <div><Markdown>{question.spurning}</Markdown></div>
+      <div>
+        <Markdown>{question.spurning}</Markdown>
+      </div>
       <p>Flokkur: {question.flokkur.title}</p>
-      
+
       <Link href="/questions">Til baka.</Link>
     </>
   );
