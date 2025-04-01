@@ -39,9 +39,13 @@ export default function RootLayout({
         <header className={styles.nav}>
           <nav>
             <h1>Verkefni 5</h1>
-          <Link href="/"><h2>Heim</h2></Link>
-          <h2>|</h2>
-          <Link href="/questions"><h2>Spurningar</h2></Link>
+            <Link href="/">
+              <h2>Heim</h2>
+            </Link>
+            <h2>|</h2>
+            <Link href="/questions">
+              <h2>Spurningar</h2>
+            </Link>
           </nav>
         </header>
         <main>{children}</main>

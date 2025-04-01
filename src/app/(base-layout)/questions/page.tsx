@@ -3,7 +3,7 @@ import { executeQuery } from '@/lib/datocms/executeQuery';
 import { graphql } from '@/lib/datocms/graphql';
 import { notFound } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
-import styles from './page.module.scss'
+import styles from './page.module.scss';
 
 export const metadata = {
   title: 'Spurningakerfi Jakobs',

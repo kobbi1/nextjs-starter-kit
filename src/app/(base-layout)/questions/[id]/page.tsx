@@ -39,16 +39,15 @@ export default async function QuestionPage({ params }: { params: Promise<{ id: s
 
   return (
     <>
-    <div>
-      <h3 className={styles.title}>{question.questiontitle}</h3>
+      <div>
+        <h3 className={styles.title}>{question.questiontitle}</h3>
         <div>
           <Markdown>{question.spurning}</Markdown>
         </div>
         <p>Flokkur: {question.flokkur.title}</p>
 
         <Link href="/questions">Til baka.</Link>
-    </div>
-
+      </div>
     </>
   );
 }
