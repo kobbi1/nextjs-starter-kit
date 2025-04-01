@@ -11,37 +11,31 @@ export const metadata = {
 const query = graphql(
   /* GraphQL */ `
     query Questions {
-        allQuestions {
-            questiontitle
-            id
-    }
+      allQuestions {
+        questiontitle
+        id
+      }
     }
   `,
   [],
 );
 
 export default async function QuestionsPage() {
-    revalidateTag('datocms');
-      const { allQuestions } = await executeQuery(query, {
-    
-      });
+  revalidateTag('datocms');
+  const { allQuestions } = await executeQuery(query, {});
 
-      
-    
-      if (!allQuestions) {
-        notFound();
-      }
+  if (!allQuestions) {
+    notFound();
+  }
   return (
     <>
       <h3>Hér eru spurningar! Veldu eina og svara svara svara</h3>
 
       <ul>
-        { allQuestions.map((question) => (
-            <li key={question.id}>
-                <Link href={`/questions/${question.id}`}>
-                {question.questiontitle}
-                </Link>
-            </li>
+        {allQuestions.map((question) => (
+          <li key={question.id}>
+            <Link href={`/questions/${question.id}`}>{question.questiontitle}</Link>
+          </li>
         ))}
       </ul>
       <Link href="/">Til baka</Link>
