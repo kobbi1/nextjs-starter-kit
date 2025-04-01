@@ -2444,6 +2444,14 @@ enum ItemStatus {
 
 scalar JsonField
 
+"""Specifies how to filter JSON fields"""
+input JsonFilter {
+  """
+  Filter records with the specified field defined (i.e. with any value) or not
+  """
+  exists: BooleanType
+}
+
 """Specifies how to filter Single-link fields"""
 input LinkFilter {
   """
@@ -2483,6 +2491,47 @@ input OrientationFilter {
 
   """Exclude uploads with the specified orientation"""
   neq: UploadOrientation
+}
+
+input PageModelFilter {
+  _createdAt: CreatedAtFilter
+  id: ItemIdFilter
+  _firstPublishedAt: PublishedAtFilter
+  _publicationScheduledAt: PublishedAtFilter
+  _unpublishingScheduledAt: PublishedAtFilter
+  _publishedAt: PublishedAtFilter
+  _status: StatusFilter
+  _updatedAt: UpdatedAtFilter
+  _isValid: BooleanFilter
+  seoAnalysis: JsonFilter
+  seoSettingsSocial: SeoFilter
+  structuredText: StructuredTextFilter
+  title: StringFilter
+  OR: [PageModelFilter]
+  AND: [PageModelFilter]
+}
+
+enum PageModelOrderBy {
+  _createdAt_ASC
+  _createdAt_DESC
+  id_ASC
+  id_DESC
+  _firstPublishedAt_ASC
+  _firstPublishedAt_DESC
+  _publicationScheduledAt_ASC
+  _publicationScheduledAt_DESC
+  _unpublishingScheduledAt_ASC
+  _unpublishingScheduledAt_DESC
+  _publishedAt_ASC
+  _publishedAt_DESC
+  _status_ASC
+  _status_DESC
+  _updatedAt_ASC
+  _updatedAt_DESC
+  _isValid_ASC
+  _isValid_DESC
+  title_ASC
+  title_DESC
 }
 
 union PageModelStructuredTextBlocksField = ImageBlockRecord | ImageGalleryBlockRecord | VideoBlockRecord
@@ -2562,6 +2611,13 @@ input PublishedAtFilter {
 """The query root for this schema"""
 type Query {
   """Returns meta information regarding a record collection"""
+  _allPagesMeta(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+    filter: PageModelFilter
+  ): CollectionMetadata!
+
+  """Returns meta information regarding a record collection"""
   _allQuestioncategoriesMeta(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -2592,6 +2648,25 @@ type Query {
     """
     fallbackLocales: [SiteLocale!]
   ): Site!
+
+  """Returns a collection of records"""
+  allPages(
+    """The locale to use to fetch the field's content"""
+    locale: SiteLocale
+
+    """
+    If you want to fallback to a default translation when a translation has not been found
+    """
+    fallbackLocales: [SiteLocale!]
+
+    """Skip the first results"""
+    skip: IntType
+
+    """Limit the number of results"""
+    first: IntType = 20
+    filter: PageModelFilter
+    orderBy: [PageModelOrderBy] = [_updatedAt_DESC]
+  ): [PageRecord!]!
 
   """Returns a collection of records"""
   allQuestioncategories(
@@ -2650,7 +2725,7 @@ type Query {
     orderBy: [UploadOrderBy] = [_createdAt_DESC]
   ): [FileField!]!
 
-  """Returns the single instance record"""
+  """Returns a specific record"""
   page(
     """The locale to use to fetch the field's content"""
     locale: SiteLocale
@@ -2659,6 +2734,8 @@ type Query {
     If you want to fallback to a default translation when a translation has not been found
     """
     fallbackLocales: [SiteLocale!]
+    filter: PageModelFilter
+    orderBy: [PageModelOrderBy] = [_updatedAt_DESC]
   ): PageRecord
 
   """Returns a specific record"""
@@ -2900,6 +2977,14 @@ type SeoField {
   twitterCard: String
 }
 
+"""Specifies how to filter SEO meta tags fields"""
+input SeoFilter {
+  """
+  Filter records with the specified field defined (i.e. with any value) or not
+  """
+  exists: BooleanType
+}
+
 type Site {
   favicon: FileField
   faviconMetaTags(
@@ -2993,6 +3078,30 @@ input StringMatchesFilter {
   pattern: String!
   caseSensitive: BooleanType = false
   regexp: BooleanType = true
+}
+
+"""Specifies how to filter Structured Text fields values"""
+input StructuredTextFilter {
+  """Filter records based on a regular expression"""
+  matches: StringMatchesFilter
+
+  """Exclude records based on a regular expression"""
+  notMatches: StringMatchesFilter
+
+  """
+  Filter records with the specified field set as blank (null or single empty paragraph)
+  """
+  isBlank: BooleanType
+
+  """
+  Filter records with the specified field present (neither null, nor empty string)
+  """
+  isPresent: BooleanType
+
+  """
+  Filter records with the specified field defined (i.e. with any value) or not [DEPRECATED]
+  """
+  exists: BooleanType
 }
 
 type Tag {

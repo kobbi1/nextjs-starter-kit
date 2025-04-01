@@ -4,8 +4,10 @@ import { executeQuery } from '@/lib/datocms/executeQuery';
 import { graphql } from '@/lib/datocms/graphql';
 import { draftMode } from 'next/headers';
 import { toNextMetadata } from 'react-datocms';
+import styles from './layout.module.scss';
 
 import './global.css';
+import Link from 'next/link';
 
 const query = graphql(
   /* GraphQL */ `
@@ -34,8 +36,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <header>
-          <h1>Verkefni 5</h1>
+        <header className={styles.nav}>
+          <nav>
+            <h1>Verkefni 5</h1>
+          <Link href="/"><h2>Heim</h2></Link>
+          <h2>|</h2>
+          <Link href="/questions"><h2>Spurningar</h2></Link>
+          </nav>
         </header>
         <main>{children}</main>
       </body>

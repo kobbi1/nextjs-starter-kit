@@ -3,6 +3,7 @@ import { executeQuery } from '@/lib/datocms/executeQuery';
 import { graphql } from '@/lib/datocms/graphql';
 import { notFound } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
+import styles from './page.module.scss'
 
 export const metadata = {
   title: 'Spurningakerfi Jakobs',
@@ -29,7 +30,7 @@ export default async function QuestionsPage() {
   }
   return (
     <>
-      <h3>Hér eru spurningar! Veldu eina og svara svara svara</h3>
+      <h3 className={styles.title}>Spurningar í boði</h3>
 
       <ul>
         {allQuestions.map((question) => (
